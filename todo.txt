@@ -1,0 +1,11 @@
+- Input Loop
+- Parsing
+	- Lexical Analysis/Tokenization
+* enum that contains token names
+* struct to hold each found token that contains: enum of token name and value of token
+* loop over string of text (in our case, a command), separate the tokens:values and put them in an array
+	** command [command modifiers] [command inputs]
+		ex. rm -rf example-dir/
+
+- Executing standard terminal commands like ls, cd, touch, etc...
+- Output/input redirection
