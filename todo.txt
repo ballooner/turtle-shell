@@ -5,7 +5,19 @@
 * struct to hold each found token that contains: enum of token name and value of token
 * loop over string of text (in our case, a command), separate the tokens:values and put them in an array
 	** command [command modifiers] [command inputs]
-		ex. rm -rf example-dir/
+		ex. grep -i "hello" input.txt > output.txt
+
+Tokens: 
+COMMAND = grep,
+COMMAND_FLAG = -i,
+PARAMETER = input.txt,
+OPERATOR = >,
+PARAMETER = output.txt
+
+Good shell operations write-up: https://unix.stackexchange.com/questions/159513/what-are-the-shells-control-and-redirection-operators
+
+* Implement basic tokenization without operators
+* Add operator functionality
 
 - Executing standard terminal commands like ls, cd, touch, etc...
 - Output/input redirection
