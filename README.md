@@ -1,7 +1,8 @@
 # turtle-shell
 
 ## Overview
-This project is a simple shell that I built to learn more how shells work.
+This project is a simple shell that I built to further my C programming knowledge and
+learn how a shell parses and executes commands.
 
 ## Goals
 
