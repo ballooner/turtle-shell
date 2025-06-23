@@ -15,6 +15,6 @@ typedef struct token
 	char       value[];
 } token_t;
 
-token_t* parseCommand(void);
+token_t* parseCommand(char commandBuffer[]);
 
 #endif
