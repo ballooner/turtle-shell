@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <Lexer.h>
+
 #define BUFFER_SIZE 4095
 
 // Return a char* from input that is [startIndex, endIndex]
@@ -25,18 +27,6 @@ char* substr(const char* input, int startIndex, int endIndex)
 	return returnStr;
 }
 
-void getCommand(const char* input, char* output)
-{
-	for (int i = 0; i < (int)strlen(input); i++)
-	{
-		if (input[i] == ' ')
-		{
-			strcpy(output, substr(input, 0, i));
-			return;
-		}
-	}
-}
-
 void input_loop(void)
 {
 	char buffer[BUFFER_SIZE];
@@ -47,8 +37,7 @@ void input_loop(void)
 		if (fgets(buffer, BUFFER_SIZE, stdin) == NULL)
 			exit(1);
 
-		char command[64];
-		getCommand(buffer, command);
+		printf("isCtrlOperator: %d\n", isControlOperator(substr(buffer, 0, 0)));
 
 		if (buffer[0] == 'q')
 			exit(0);
