@@ -2,30 +2,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-
 #include <Lexer.h>
 
 #define BUFFER_SIZE 4095
-
-// Return a char* from input that is [startIndex, endIndex]
-char* substr(const char* input, int startIndex, int endIndex)
-{
-	char str[1024];
-	int currChar = 0;
-	while (input[startIndex] != '\0'
-			&& startIndex <= endIndex && currChar < 1023)
-	{
-		str[currChar] = input[startIndex];
-
-		startIndex++;
-		currChar++;
-	}
-
-	str[currChar] = '\0';
-	char* returnStr = str;
-
-	return returnStr;
-}
 
 void input_loop(void)
 {
@@ -37,7 +16,8 @@ void input_loop(void)
 		if (fgets(buffer, BUFFER_SIZE, stdin) == NULL)
 			exit(1);
 
-		printf("isCtrlOperator: %d\n", isControlOperator(substr(buffer, 0, 0)));
+		token_t tokens[BUFFER_SIZE];
+		int numTokens = tokenize(buffer, tokens);
 
 		if (buffer[0] == 'q')
 			exit(0);
