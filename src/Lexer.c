@@ -23,6 +23,21 @@ int tokenize(const char* input, token_t tokens[])
 		if (leftIndex == rightIndex && isspace(input[rightIndex]))
 		{
 			leftIndex++;
+		} else if (leftIndex == rightIndex && input[rightIndex] == '"')
+		{
+			rightIndex++;
+			while (input[rightIndex] != '"')
+			{
+				rightIndex++;
+			}
+
+			token_t newToken;
+			newToken.type = STRING_LITERAL;
+			strcpy(newToken.value, substr(input, leftIndex, rightIndex));
+			rightIndex++;
+			leftIndex = rightIndex;
+			tokens[currTokens] = newToken;
+			currTokens++;
 		} else if (leftIndex < rightIndex && (isspace(input[rightIndex]) || input[rightIndex] == '\n'))
 		{
 			strcpy(currLiteral, substr(input, leftIndex, rightIndex - 1));

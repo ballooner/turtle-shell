@@ -8,16 +8,22 @@
 		ex. grep -i "hello" input.txt > output.txt
 
 Tokens: 
-COMMAND = grep,
+STRING_LITERAL = grep,
 COMMAND_FLAG = -i,
-PARAMETER = input.txt,
+STRING_LITERAL = "hello",
+STRING_LITERAL = input.txt,
 OPERATOR = >,
-PARAMETER = output.txt
+STRING_LITERAL = output.txt
+
+(We classify commands and parameters as string literals because their meaning is based on their location, not their grammar.
+	For example a command will always come before a parameter and it may take parameters, so whether the token is located before/after something matters.)
 
 Good shell operations write-up: https://unix.stackexchange.com/questions/159513/what-are-the-shells-control-and-redirection-operators
 
+	- Parse generated token array
+
+
 * Implement basic tokenization without operators
-* Add operator functionality
 
 - Executing standard terminal commands like ls, cd, touch, etc...
 - Output/input redirection
