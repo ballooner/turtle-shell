@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-#include <Lexer.h>
+#include "Lexer.h"
+#include "Executor.h"
 
 #define BUFFER_SIZE 4095
 
@@ -19,14 +20,13 @@ void input_loop(void)
 		token_t tokens[BUFFER_SIZE];
 		int numTokens = tokenize(buffer, tokens);
 
-		for (int i = 0; i < numTokens; i++)
-		{
-			printf("Index: %d, TokenType: %s, Value: %s\n",
-		  			i, type_names[tokens[i].type], tokens[i].value);
-		}
-
 		if (buffer[0] == 'q')
+		{
 			exit(0);
+		} else
+		{
+			execBasic(tokens[0].value);
+		}
 	}
 }
 
