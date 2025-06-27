@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
 #include "Lexer.h"
 #include "Executor.h"
 
@@ -25,7 +24,7 @@ void input_loop(void)
 			exit(0);
 		} else
 		{
-			execBasic(tokens[0].value);
+			turtleExec(tokens, numTokens);
 		}
 	}
 }

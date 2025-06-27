@@ -3,7 +3,22 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-int execBasic(const char* command)
+static int basicExec(const char* command);
+static int argExec(const char* command, const char* args[]);
+
+int turtleExec(const token_t input[], size_t num_tokens)
+{
+	int returnCode = 0;
+
+	if (num_tokens == 1)
+	{
+		returnCode = basicExec(input[0].value);
+	}
+
+	return returnCode;
+}
+
+static int basicExec(const char* command)
 {
 	int returnCode;
 	pid_t child = fork();
@@ -28,3 +43,5 @@ int execBasic(const char* command)
 
 	return -1;
 }
+
+
