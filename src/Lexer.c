@@ -1,6 +1,8 @@
 #include "Lexer.h"
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 char* type_names[] =
 {
@@ -10,7 +12,7 @@ char* type_names[] =
 		"RDIR_OP"
 };
 
-int tokenize(const char* input, token_t tokens[])
+int tokenize(const char* input, token_t* tokens[])
 {
 	int leftIndex = 0;
 	int rightIndex = 0;
@@ -23,40 +25,26 @@ int tokenize(const char* input, token_t tokens[])
 		if (leftIndex == rightIndex && isspace(input[rightIndex]))
 		{
 			leftIndex++;
+			rightIndex++;
+			continue;
 		} else if (leftIndex == rightIndex && input[rightIndex] == '"')
 		{
-			rightIndex++;
-			while (input[rightIndex] != '"')
+			while (leftIndex != rightIndex && input[rightIndex] != '"')
 			{
 				rightIndex++;
 			}
 
-			token_t newToken;
-			newToken.type = STRING_LITERAL;
-			strcpy(newToken.value, substr(input, leftIndex, rightIndex));
+			token_t* newToken = createToken(STRING_LITERAL, substr(input, leftIndex, rightIndex));
+
 			rightIndex++;
 			leftIndex = rightIndex;
 			tokens[currTokens] = newToken;
 			currTokens++;
+			continue;
 		} else if (leftIndex < rightIndex && (isspace(input[rightIndex]) || input[rightIndex] == '\n'))
 		{
 			strcpy(currLiteral, substr(input, leftIndex, rightIndex - 1));
-			token_t newToken;
-
-			if (isControlOperator(currLiteral))
-			{
-				newToken.type = CTRL_OP;
-			} else if (isRedirectionOperator(currLiteral))
-			{
-				newToken.type = RDIR_OP;
-			} else if (isCommandFlag(currLiteral))
-			{
-				newToken.type = COMMAND_FLAG;
-			} else // It is either a command or a parameter
-			{	   // the parser can figure out which
-				newToken.type = STRING_LITERAL;
-			}
-			strcpy(newToken.value, currLiteral);
+			token_t* newToken = createToken(getType(currLiteral), currLiteral);
 
 			tokens[currTokens] = newToken;
 			currTokens++;
@@ -64,11 +52,40 @@ int tokenize(const char* input, token_t tokens[])
 			// right's next value or left will be one behind
 			leftIndex = rightIndex + 1;
 		}
-
 		rightIndex++;
 	}
 
 	return currTokens;
+}
+
+token_t* createToken(enum TokenType type, const char value[])
+{
+	token_t* newToken = malloc(sizeof(token_t));
+	if (!newToken)
+	{
+		fprintf(stderr, "[createToken] token malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
+
+	newToken->value = malloc((strlen(value) + 1) * sizeof(char));
+	if (!(newToken->value))
+	{
+		fprintf(stderr, "[createToken] value malloc failed\n");
+		free(newToken);
+		exit(EXIT_FAILURE);
+	}
+
+	strcpy(newToken->value, value);
+
+	newToken->type = type;
+
+	return newToken;
+}
+
+void freeToken(token_t* token)
+{
+	free(token->value);
+	free(token);
 }
 
 // Return a char* from input that is [startIndex, endIndex]
@@ -91,34 +108,25 @@ char* substr(const char* input, int startIndex, int endIndex)
 	return returnStr;
 }
 
-bool isControlOperator(const char* input)
+enum TokenType getType(const char* input)
 {
+	if (input[0] == '-')
+	{
+		return COMMAND_FLAG;
+	}
+
 	if (strcmp(input, "|") == 0 || strcmp(input, "||") == 0 ||
 	   	strcmp(input, "&") == 0 || strcmp(input, "&&") == 0 ||
 		strcmp(input, ";") == 0)
 	{
-		return true;
+		return CTRL_OP;
 	}
 
-	return false;
-}
-
-bool isRedirectionOperator(const char* input)
-{
 	if (strcmp(input, ">") == 0 || strcmp(input, ">>") == 0 ||
 		strcmp(input, "<") == 0)
 	{
-		return true;
+		return RDIR_OP;
 	}
 
-	return false;
-
-}
-
-bool isCommandFlag(const char* input)
-{
-	if (input[0] == '-')
-		return true;
-
-	return false;
+	return STRING_LITERAL;
 }

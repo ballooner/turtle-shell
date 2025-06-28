@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "Lexer.h"
-#include "Executor.h"
 
 #define BUFFER_SIZE 4095
 
@@ -16,15 +15,23 @@ void input_loop(void)
 		if (fgets(buffer, BUFFER_SIZE, stdin) == NULL)
 			exit(1);
 
-		token_t tokens[BUFFER_SIZE];
+		token_t* tokens[BUFFER_SIZE];
 		int numTokens = tokenize(buffer, tokens);
+
+		for (int i = 0; i < numTokens; i++)
+		{
+			printf("Index: %d, Type: %s, Value: %s\n", i, type_names[tokens[i]->type], tokens[i]->value);
+		}
+
+		// Free tokens
+		for (int i = 0; i < numTokens; i++)
+		{
+			freeToken(tokens[i]);
+		}
 
 		if (buffer[0] == 'q')
 		{
 			exit(0);
-		} else
-		{
-			turtleExec(tokens, numTokens);
 		}
 	}
 }

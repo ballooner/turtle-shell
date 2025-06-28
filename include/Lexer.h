@@ -3,29 +3,31 @@
 
 #include <stdbool.h>
 
-typedef enum token_type
+enum TokenType
 {
 	STRING_LITERAL, // Command or parameter
 	COMMAND_FLAG,	// -r, -rf, etc...
 	CTRL_OP,		// |, ||, &, &&, ;
 	RDIR_OP			// <, >, >>
-} token_type_t;
+};
 
 extern char* type_names[];
 
-typedef struct token
+typedef struct Token
 {
-	token_type_t type;
-	char         value[256];
+	enum TokenType type;
+	char*          value;
 } token_t;
 
 // Tokenize the given input and put all the tokens into
 // the given token array
-int tokenize(const char* input, token_t tokens[]);
+int tokenize(const char* input, token_t* tokens[]);
+// Create a new token
+token_t* createToken(enum TokenType type, const char* value);
+// Free token
+void freeToken(token_t* token);
 // Return a char* from input that is [startIndex, endIndex]
 char* substr(const char* input, int startIndex, int endIndex);
-bool isControlOperator(const char* input);
-bool isRedirectionOperator(const char* input);
-bool isCommandFlag(const char* input);
+enum TokenType getType(const char* input);
 
 #endif
