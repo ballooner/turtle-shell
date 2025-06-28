@@ -82,10 +82,13 @@ token_t* createToken(enum TokenType type, const char value[])
 	return newToken;
 }
 
-void freeToken(token_t* token)
+void freeTokens(token_t* token[], int numTokens)
 {
-	free(token->value);
-	free(token);
+	for (int i = 0; i < numTokens; i++)
+	{
+		free(token[i]->value);
+		free(token[i]);
+	}
 }
 
 // Return a char* from input that is [startIndex, endIndex]

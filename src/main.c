@@ -24,10 +24,7 @@ void input_loop(void)
 		}
 
 		// Free tokens
-		for (int i = 0; i < numTokens; i++)
-		{
-			freeToken(tokens[i]);
-		}
+		freeTokens(tokens, numTokens);
 
 		if (buffer[0] == 'q')
 		{
