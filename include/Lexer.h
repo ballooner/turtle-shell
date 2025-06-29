@@ -26,8 +26,6 @@ int tokenize(const char* input, token_t* tokens[]);
 token_t* createToken(enum TokenType type, const char* value);
 // Free token
 void freeTokens(token_t* token[], int numTokens);
-// Return a char* from input that is [startIndex, endIndex]
-char* substr(const char* input, int startIndex, int endIndex);
 enum TokenType getType(const char* input);
 
 #endif

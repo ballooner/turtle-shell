@@ -1,4 +1,5 @@
 #include "Lexer.h"
+#include "Utils.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -89,26 +90,6 @@ void freeTokens(token_t* token[], int numTokens)
 		free(token[i]->value);
 		free(token[i]);
 	}
-}
-
-// Return a char* from input that is [startIndex, endIndex]
-char* substr(const char* input, int startIndex, int endIndex)
-{
-	char str[1024];
-	int currChar = 0;
-	while (input[startIndex] != '\0'
-			&& startIndex <= endIndex && currChar < 1023)
-	{
-		str[currChar] = input[startIndex];
-
-		startIndex++;
-		currChar++;
-	}
-
-	str[currChar] = '\0';
-	char* returnStr = str;
-
-	return returnStr;
 }
 
 enum TokenType getType(const char* input)
