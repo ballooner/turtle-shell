@@ -1,3 +1,7 @@
+Good shell operations write-up: https://unix.stackexchange.com/questions/159513/what-are-the-shells-control-and-redirection-operators
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
 - Input Loop
 - Parsing
 	- Lexical Analysis/Tokenization
@@ -18,7 +22,19 @@ STRING_LITERAL = output.txt
 (We classify commands and parameters as string literals because their meaning is based on their location, not their grammar.
 	For example a command will always come before a parameter and it may take parameters, so whether the token is located before/after something matters.)
 
-Good shell operations write-up: https://unix.stackexchange.com/questions/159513/what-are-the-shells-control-and-redirection-operators
+-------------------------------------------------------------------------------------------------------------------------------------
+
+- Executing standard terminal commands like ls, cd, touch, etc...
+	* Create a command struct that can hold all command-specific information
+	* Store commands in an array and order them by execution order
+	* Single command parsing:
+		- First string literal is always the command name
+		- Lexer seperated command flags so that is easy to put into the command struct
+		- Any other string literal is an argument
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+- Output/input redirection
 
 Control operator functionality:
 'command1 | command2'  = pass output of command1 as input to command2
@@ -32,12 +48,4 @@ Redirection operator functionality:
 'command1 >> out.txt'  = if out.txt exists, append command1 output to it
 'command1 < file.txt'  = use the contents of file.txt as input for command1
 
-	- Parse generated token array
-* Implement single command parsing
-* Add redirection operator functionality
-* Add control operator functionality
 
-* Implement basic tokenization without operators
-
-- Executing standard terminal commands like ls, cd, touch, etc...
-- Output/input redirection
