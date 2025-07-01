@@ -26,11 +26,13 @@ STRING_LITERAL = output.txt
 
 - Executing standard terminal commands like ls, cd, touch, etc...
 	* Create a command struct that can hold all command-specific information
-	* Store commands in an array and order them by execution order
+	* Store commands in an array and order them by execution order (we only deal with single commands right now)
 	* Single command parsing:
 		- First string literal is always the command name
 		- Lexer seperated command flags so that is easy to put into the command struct
 		- Any other string literal is an argument
+    * To execute a single command we just need to call loop through the command array, fork the process and then call execvp
+        with the command name and argv.
 
 -------------------------------------------------------------------------------------------------------------------------------------
 typedef struct Command
@@ -46,9 +48,12 @@ typedef struct Command
 } command_t;
 
 - Redirection Operator Implementation
+    * For commands with operators we will need to change either stdouts output location (can be done with freopen()) or 
+        change stdin to point to the specified file, dup2() can be used here.
     * When parsing command, if we encounter '>' we need to create a new file, as '>' replaces file contents instead of appending, and
         put the file into the output member of the command struct. fopen with mode of "w" works here.
-    * Same rule applies above if we encounter ">>" but we need to append toa file instead. fopen with mode of "a" works here.
+    * Same rule applies above if we encounter ">>" but we need to append to a file instead. fopen with mode of "a" works here.
+    * When encountering '<', before we execute the command, we need to change stdin to the file specified.
 
 
 Redirection operator functionality:
