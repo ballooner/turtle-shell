@@ -33,8 +33,31 @@ STRING_LITERAL = output.txt
 		- Any other string literal is an argument
 
 -------------------------------------------------------------------------------------------------------------------------------------
+typedef struct Command
+{
+	char* name;
+	char ctrl_op;
+	char redir_op;
+	FILE* input;
+	FILE* output;
+	int return_code;
+	size_t argc;
+	char* argv[256];
+} command_t;
 
-- Output/input redirection
+- Redirection Operator Implementation
+    * When parsing command, if we encounter '>' we need to create a new file, as '>' replaces file contents instead of appending, and
+        put the file into the output member of the command struct. fopen with mode of "w" works here.
+    * Same rule applies above if we encounter ">>" but we need to append toa file instead. fopen with mode of "a" works here.
+
+
+Redirection operator functionality:
+'command1 > out.txt'   = put the output of command1 into out.txt
+'command1 >> out.txt'  = if out.txt exists, append command1 output to it
+'command1 < file.txt'  = use the contents of file.txt as input for command1
+
+
+
 
 Control operator functionality:
 'command1 | command2'  = pass output of command1 as input to command2
@@ -42,10 +65,4 @@ Control operator functionality:
 'command1 & command2'  = run command1 in the background and command2 in the foreground
 'command1 && command2' = run command2 if command1 exited succesfully
 'command1; command2'   = run command1 and then command2
-
-Redirection operator functionality:
-'command1 > out.txt'   = put the output of command1 into out.txt
-'command1 >> out.txt'  = if out.txt exists, append command1 output to it
-'command1 < file.txt'  = use the contents of file.txt as input for command1
-
 

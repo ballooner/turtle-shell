@@ -24,11 +24,7 @@ void input_loop(void)
 		token_t* tokens[BUFFER_SIZE];
 		size_t numTokens = tokenize(buffer, tokens);
 		initCommandList(tokens, numTokens);
-
-		printf("Command name: %s\n", commandList[0].name);
-		printf("Command flags: %s\n", commandList[0].argv[1]);
-		printf("Command args: %s\n", commandList[0].argv[2]);
-
+		executeCommands();
 
 		// Free tokens
 		freeTokens(tokens, numTokens);

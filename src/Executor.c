@@ -1,9 +1,32 @@
 #include "Executor.h"
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 command_t commandList[128];
 size_t numCommands = 0;
+
+void executeCommands()
+{
+	command_t currCommand;
+	for (int i = 0; i < (int)numCommands; i++)
+	{
+		currCommand = commandList[0];
+
+		int child = fork();
+
+		if (child == 0)
+		{
+			execvp(currCommand.name, currCommand.argv);
+		} else
+		{
+			wait(NULL);
+		}
+
+	}
+	numCommands = 0;
+}
 
 void initCommandList(token_t* tokens[], size_t numTokens)
 {
