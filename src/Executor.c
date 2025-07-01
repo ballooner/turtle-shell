@@ -49,4 +49,6 @@ void clearCommandList()
 			free(currCommand.argv[j]);
 		}
 	}
+
+	numCommands = 0;
 }
