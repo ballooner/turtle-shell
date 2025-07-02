@@ -14,18 +14,66 @@ void executeCommands()
 	{
 		currCommand = commandList[0];
 
-		int child = fork();
-
-		if (child == 0)
+		if (!currCommand.input && !currCommand.output)
+	  	{
+			basicExecute(currCommand);
+		} else if (currCommand.redir_op)
 		{
-			execvp(currCommand.name, currCommand.argv);
+			redirExecute(currCommand);
+		}
+	}
+
+	numCommands = 0;
+}
+
+void basicExecute(command_t command)
+{
+	int child = fork();
+
+	if (child == -1)
+	{
+		fprintf(stderr, "basicExecute fork failed\n");
+		exit(-1);
+	}
+
+	if (child == 0)
+	{
+		execvp(command.name, command.argv);
+	} else
+	{
+		wait(NULL);
+	}
+}
+
+void redirExecute(command_t command)
+{
+	int child = fork();
+
+	if (child == -1)
+	{
+		fprintf(stderr, "redirExecute fork failed\n");
+		exit(-1);
+	}
+
+	if (child == 0)
+	{
+		if (strcmp(command.redir_op->value, ">"))
+		{
+			freopen(command.output, "w", stdout);
+			execvp(command.name, command.argv);
+		} else if (strcmp(command.redir_op->value, ">>"))
+		{
+			freopen(command.output, "a", stdout);
+			execvp(command.name, command.argv);
 		} else
 		{
-			wait(NULL);
+			freopen(command.input, "r", stdin);
+			execvp(command.name, command.argv);
 		}
-
+	} else
+	{
+		wait(NULL);
 	}
-	numCommands = 0;
 }
 
 void initCommandList(token_t* tokens[], size_t numTokens)
@@ -55,6 +103,19 @@ void initCommandList(token_t* tokens[], size_t numTokens)
 		{
 			command.argv[processedArgs++] = strdup(tokens[i]->value);
 			command.argc++;
+		}
+
+		// Handle redirection operator
+		if (tokens[i]->type == RDIR_OP && tokens[i + 1])
+		{
+			command.redir_op = tokens[i];
+			if (strcmp(tokens[i]->value, ">") == 0 || strcmp(tokens[i]->value, ">>") == 0)
+			{
+				command.output = tokens[i + 1]->value;
+			} else if (strcmp(tokens[i]->value, "<") == 0)
+			{
+				command.input = tokens[i + 1]->value;
+			}
 		}
 	}
 

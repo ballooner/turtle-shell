@@ -35,17 +35,6 @@ STRING_LITERAL = output.txt
         with the command name and argv.
 
 -------------------------------------------------------------------------------------------------------------------------------------
-typedef struct Command
-{
-	char* name;
-	char ctrl_op;
-	char redir_op;
-	FILE* input;
-	FILE* output;
-	int return_code;
-	size_t argc;
-	char* argv[256];
-} command_t;
 
 - Redirection Operator Implementation
     * For commands with operators we will need to change either stdouts output location (can be done with freopen()) or 
