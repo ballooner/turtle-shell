@@ -7,7 +7,6 @@ enum TokenType
 {
 	STRING_LITERAL, // Command or parameter
 	COMMAND_FLAG,	// -r, -rf, etc...
-	CTRL_OP,		// |, ||, &, &&, ;
 	RDIR_OP			// <, >, >>
 };
 

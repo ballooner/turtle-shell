@@ -7,7 +7,6 @@
 typedef struct Command
 {
 	char* name;
-	token_t* ctrl_op;
 	token_t* redir_op;
 	char* input;
 	char* output;
@@ -23,6 +22,7 @@ extern size_t numCommands;
 void executeCommands();
 void basicExecute(command_t command);
 void redirExecute(command_t command);
+void ctrlExecute(command_t command);
 void initCommandList(token_t* tokens[], size_t numTokens);
 void clearCommandList();
 

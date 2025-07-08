@@ -116,6 +116,10 @@ void initCommandList(token_t* tokens[], size_t numTokens)
 			{
 				command.input = tokens[i + 1]->value;
 			}
+		} else if (tokens[i]->type == RDIR_OP && !tokens[i + 1])
+		{
+			printf("No target after redirection operator\n");
+			break;
 		}
 	}
 

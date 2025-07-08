@@ -9,7 +9,6 @@ char* type_names[] =
 {
 		"STRING_LITERAL",
 		"COMMAND_FLAG",
-		"CTRL_OP",
 		"RDIR_OP"
 };
 
@@ -97,13 +96,6 @@ enum TokenType getType(const char* input)
 	if (input[0] == '-')
 	{
 		return COMMAND_FLAG;
-	}
-
-	if (strcmp(input, "|") == 0 || strcmp(input, "||") == 0 ||
-	   	strcmp(input, "&") == 0 || strcmp(input, "&&") == 0 ||
-		strcmp(input, ";") == 0)
-	{
-		return CTRL_OP;
 	}
 
 	if (strcmp(input, ">") == 0 || strcmp(input, ">>") == 0 ||

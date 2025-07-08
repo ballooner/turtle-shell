@@ -49,14 +49,3 @@ Redirection operator functionality:
 'command1 > out.txt'   = put the output of command1 into out.txt
 'command1 >> out.txt'  = if out.txt exists, append command1 output to it
 'command1 < file.txt'  = use the contents of file.txt as input for command1
-
-
-
-
-Control operator functionality:
-'command1 | command2'  = pass output of command1 as input to command2
-'command1 || command2' = run command2 if command1 exited unsuccesfully
-'command1 & command2'  = run command1 in the background and command2 in the foreground
-'command1 && command2' = run command2 if command1 exited succesfully
-'command1; command2'   = run command1 and then command2
-
